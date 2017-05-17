@@ -19,7 +19,8 @@
   "homepage": "https://github.com/santicanti/api-rest-nodejs-example#readme",
   "dependencies": {
     "body-parser": "^1.17.1",
-    "express": "^4.15.3"
+    "express": "^4.15.3",
+    "mongoose": "^4.9.9"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
