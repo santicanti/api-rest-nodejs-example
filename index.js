@@ -13,11 +13,22 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.get('/api/product', (req, res) => {
-  res.status(200).send({products: []})
+  Product.find({}, (err, products) => {
+    if (err) return res.status(500).send({message: 'error finding products' + err})
+    if (!products) return res.status(404).send({message: 'There are no products'})
+    res.status(200).send({products})
+  })
 })
 
 app.get('/api/product/:productId', (req, res) => {
+  let productId = req.params.productId
 
+  Product.findById(productId, (err, product) => {
+    if (err) return res.status(500).send({message: 'error finding product: ' + err})
+    if (!product) return res.status(404).send({message: 'product doesnt exist'})
+
+    res.status(200).send({product})
+  })
 })
 
 app.post('/api/product', (req, res) => {
@@ -31,8 +42,8 @@ app.post('/api/product', (req, res) => {
   product.description = req.body.description
 
   product.save((err, storedProduct) => {
-    if (err) res.status(500).send({message: 'error saving product: ' + err})
-    else res.status(200).send({product: storedProduct})
+    if (err) return res.status(500).send({message: 'error saving product: ' + err})
+    res.status(200).send({product: storedProduct})
   })
 })
 
