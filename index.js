@@ -48,11 +48,25 @@ app.post('/api/product', (req, res) => {
 })
 
 app.put('/api/product/:productId', (req, res) => {
+  let productId = req.params.productId
+  let update = req.body
+  Product.findByIdAndUpdate(productId, update, (err) => {
+    if (err) return res.status(500).send({message: 'error updating: ' + err})
 
+    res.status(200).send({message: 'product updated'})
+  })
 })
 
-app.delete('/api/product/productId', (req, res) => {
+app.delete('/api/product/:productId', (req, res) => {
+  let productId = req.params.productId
+  Product.findById(productId, (err, product) => {
+    if (err) return res.status(500).send({message: 'error deleting product: ' + err})
 
+    product.remove(err => {
+      if (err) return res.status(500).send({message: 'error deleting product: ' + err})
+      res.status(200).send({message: 'Product deleted'})
+    })
+  })
 })
 
 mongoose.connect('mongodb://localhost:27017/shop', (err, res) => {
